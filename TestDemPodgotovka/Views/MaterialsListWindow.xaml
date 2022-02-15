@@ -1,38 +1,40 @@
-﻿<Window x:Class="TestDemPodgotovka.MaterialsListWindow"
+﻿<Window x:Class="TestDemPodgotovka.Views.MaterialsListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TestDemPodgotovka"
+        xmlns:local="clr-namespace:TestDemPodgotovka.Views"
         mc:Ignorable="d"
-        Title="Список материалов" Height="642" Width="992">
+        Title="Список материалов" Height="642" Width="992" Icon="/TestDemPodgotovka;component/Resources/Images/Большая пачка.ico" RenderOptions.BitmapScalingMode="HighQuality">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <TextBlock Text="{Binding DisplayedCountOfMaterials}" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5"/>
+        <Grid Margin="0,25,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Grid.Column="0" Header="Введите для поиска" FontSize="16">
-                <TextBox Text="{Binding Search}" VerticalAlignment="Center" FontSize="16"/>
+                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16"/>
             </GroupBox>
             <GroupBox Grid.Column="1" Header="Сортировка" FontSize="16">
                 <ComboBox ItemsSource="{Binding SortParams}" FontSize="16" DisplayMemberPath="Title" VerticalAlignment="Center" SelectedItem="{Binding SelectedSort}"/>
             </GroupBox>
+            
             <GroupBox Grid.Column="2" Header="Фильтрация" FontSize="16">
                 <ComboBox ItemsSource="{Binding FilterParams}" FontSize="16" VerticalAlignment="Center" SelectedItem="{Binding SelectedFilter}"/>
             </GroupBox>
         </Grid>
-        <ListView BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" ItemsSource="{Binding DisplayedMaterials}" SelectedItem="{Binding SelectedMaterial}">
+        <ListView x:Name="materialsList" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" SelectionChanged="materialsList_SelectionChanged" ItemsSource="{Binding DisplayedMaterials}" SelectedItem="{Binding SelectedMaterial}">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type ListViewItem}">
                     <Border BorderBrush="Black" BorderThickness="1">
-                        <Grid>
+                        <Grid Background="{Binding ID, Converter={StaticResource colorListViewConv}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="2*"/>
@@ -68,6 +70,7 @@
                 </ListView>
                 <Button x:Name="forward" Width="20" Content="→" Height="20" Click="forward_Click"/>
             </StackPanel>
+            <Button x:Name="minCountChange" Content="Изменить количество на..." Visibility="{Binding BtnVisibility}" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Width="172" Click="minCountChange_Click"/>
         </Grid>
 
 

@@ -2,16 +2,19 @@ namespace TestDemPodgotovka.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Windows.Media.Imaging;
 
     [Table("Material")]
-    public partial class Material : BaseEntity
+    public partial class Material : BaseEntity, INotifyPropertyChanged
     {
+        private double minCount;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Material()
         {
@@ -34,7 +37,7 @@ namespace TestDemPodgotovka.Data
 
         public double? CountInStock { get; set; }
 
-        public double MinCount { get; set; }
+        public double MinCount { get => minCount; set { minCount = value; OnPropertyChanged(); } }
 
         public string Description { get; set; }
 
@@ -103,5 +106,11 @@ namespace TestDemPodgotovka.Data
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Supplier> Supplier { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }

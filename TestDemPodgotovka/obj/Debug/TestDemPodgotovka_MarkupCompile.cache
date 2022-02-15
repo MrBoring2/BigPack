@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\obj\Debug\
+C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\
 TestDemPodgotovka
 none
 false
 DEBUG;TRACE
-C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\App.xaml
-11495230100
+C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\App.xaml
+3361969240
 
-221193841348
-181000042945
-MaterialsListWindow.xaml;
+242044470702
+18276854400
+Views\MaterialsListWindow.xaml;Views\MaterialWindow.xaml;Views\MinCountChangeWindow.xaml;
 
-True
+False
 

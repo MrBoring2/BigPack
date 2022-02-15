@@ -20,19 +20,22 @@ using System.Windows.Threading;
 using TestDemPodgotovka.Data;
 using TestDemPodgotovka.Models;
 
-namespace TestDemPodgotovka
+namespace TestDemPodgotovka.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MaterialsListWindow : Window, INotifyPropertyChanged
     {
+        private string displayedCountOfMaterials;
         private readonly int itemsPerPage;
         private readonly TestDemContext _context;
         private string search;
         private int currentPage;
         private Sort selectedSort;
+        private Visibility btnVisibility;
         private string selectedFilter;
+
         private ObservableCollection<int> pages;
         private ObservableCollection<Sort> sortParams;
         private ObservableCollection<string> filterParams;
@@ -46,12 +49,15 @@ namespace TestDemPodgotovka
             search = string.Empty;
             LoadData();
             RefreshPages();
+            BtnVisibility = Visibility.Collapsed;
             DataContext = this;
         }
 
-        public string Search { get { return search; } set { search = value; OnPropertyChanged(); } }
-        public int CurrentPage { get { return currentPage; } set { currentPage = value; OnPropertyChanged(); RefreshMaterials(); } }
+        public string Search { get { return search; } set { search = value; OnPropertyChanged(); RefreshMaterials(); RefreshPages(); } }
+        public int CurrentPage { get { return currentPage; } set { currentPage = value > 0 ? value : 1; OnPropertyChanged(); RefreshMaterials(); } }
+        public string DisplayedCountOfMaterials { get => displayedCountOfMaterials; set { displayedCountOfMaterials = value; OnPropertyChanged(); } }
         public Sort SelectedSort { get { return selectedSort; } set { selectedSort = value; OnPropertyChanged(); RefreshMaterials(); } }
+        public Visibility BtnVisibility { get => btnVisibility; set { btnVisibility = value; OnPropertyChanged(); } }
         public string SelectedFilter { get { return selectedFilter; } set { selectedFilter = value; OnPropertyChanged(); RefreshMaterials(); RefreshPages(); } }
         public ObservableCollection<int> Pages { get { return pages; } set { pages = value; OnPropertyChanged(); } }
         public ObservableCollection<Sort> SortParams { get { return sortParams; } set { sortParams = value; OnPropertyChanged(); } }
@@ -121,8 +127,8 @@ namespace TestDemPodgotovka
         {
             var materials = SortMaterials(Materials);
             materials = FilterMaterals(materials);
-            DisplayedMaterials = new ObservableCollection<Material>(materials.Skip(CurrentPage * itemsPerPage).Take(itemsPerPage).ToList());
-
+            DisplayedCountOfMaterials = $"{materials.Count} из {Materials.Count}";
+            DisplayedMaterials = new ObservableCollection<Material>(materials.Skip((CurrentPage - 1) * itemsPerPage).Take(itemsPerPage).ToList());
         }
 
         private List<Material> SortMaterials(List<Material> materials)
@@ -145,7 +151,8 @@ namespace TestDemPodgotovka
         private int MaxPage()
         {
             var materials = FilterMaterals(Materials);
-            return (int)Math.Floor((float)materials.Count / (float)itemsPerPage);
+            var a = (int)Math.Ceiling((float)materials.Count / (float)itemsPerPage);
+            return (int)Math.Ceiling((float)materials.Count / (float)itemsPerPage);
         }
 
         private void paginator_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -166,6 +173,35 @@ namespace TestDemPodgotovka
             if (CurrentPage + 1 <= MaxPage())
             {
                 CurrentPage++;
+            }
+        }
+
+
+        private void minCountChange_Click(object sender, RoutedEventArgs e)
+        {
+            var max = materialsList.SelectedItems.Cast<Material>().Max(p => p.MinCount);
+            var changeWindow = new MinCountChangeWindow(max);
+            if (changeWindow.ShowDialog() == true)
+            {
+                foreach (var item in materialsList.SelectedItems.Cast<Material>())
+                {
+                    item.MinCount = changeWindow.Count;
+                }
+
+                var a = _context.SaveChanges();
+                //RefreshMaterials();
+            }
+        }
+
+        private void materialsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(materialsList.SelectedItems.Count > 1)
+            {
+                BtnVisibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnVisibility = Visibility.Collapsed;
             }
         }
 
