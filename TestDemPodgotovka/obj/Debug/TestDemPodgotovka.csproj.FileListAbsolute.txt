@@ -44,6 +44,6 @@ C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovk
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.CopyComplete
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.exe
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.pdb
-C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.AssemblyReference.cache
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\Views\MaterialWindow.g.cs
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\Views\MaterialWindow.baml
+C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.AssemblyReference.cache

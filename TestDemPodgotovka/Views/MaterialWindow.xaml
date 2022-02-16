@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestDemPodgotovka.Views"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="450" Width="718.132">
+        Title="{Binding WindowTitle}" Height="540.167" Width="661.466">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200*"/>
@@ -16,25 +16,33 @@
                 <TextBlock Text="Наименование" Margin="5"/>
                 <TextBox Text="{Binding MaterialName}" Margin="5,0"/>
                 <TextBlock Text="Тип материала" Margin="5"/>
-                <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" Margin="5,0"/>
+                <ComboBox DisplayMemberPath="Title" ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" Margin="5,0"/>
                 <TextBlock Text="Количество на складе"  Margin="5"/>
-                <TextBox Text="{Binding CountInStock}" Margin="5,0"/>
+                <TextBox Text="{Binding AmountInStock}" Margin="5,0"/>
+                <TextBlock Text="Минимальное количество"  Margin="5"/>
+                <TextBox Text="{Binding MinCount}" Margin="5,0"/>
                 <TextBlock Text="Количество в упаковке" Margin="5"/>
-                <TextBox Text="{Binding CountinPack}" Margin="5,0"/>
+                <TextBox Text="{Binding AmountInPack}" Margin="5,0"/>
+                <TextBlock Text="Единица измерения"  Margin="5"/>
+                <TextBox Text="{Binding Unit}" Margin="5,0"/>
                 <TextBlock Text="Стоимость за единицу"  Margin="5"/>
-                <TextBox Text="{Binding CostOfOne}" Margin="5,0"/>
+                <TextBox Text="{Binding CostForOne}" Margin="5,0"/>
+           
                 <TextBlock Text="Картинка"  Margin="5"/>
                 <Image Source="{Binding Image}" Width="80" Height="80"/>
-                <Button x:Name="loadImage" Margin="5" Content="Загрузить" Visibility="{Binding BtnVisibility}" Click="loadImage_Click"/>
+                <Button x:Name="loadImage" Margin="5" VerticalAlignment="Bottom" Content="Загрузить" Visibility="{Binding BtnVisibility}" Click="loadImage_Click"/>
             </StackPanel>
-            <Button x:Name="save" VerticalAlignment="Bottom" Content="Созранить" Margin="5" Click="save_Click"/>
+            <Button x:Name="delete" Content="Удалить" VerticalAlignment="Bottom" Margin="5,0,5,30" Click="delete_Click"/>
+            <Button x:Name="save" VerticalAlignment="Bottom" Content="Сохранить" Margin="5" Click="save_Click"/>
         </Grid>
         <Grid Grid.Column="1">
             <StackPanel>
-                <TextBlock Text="Список материалов" Margin="5"/>
-                <ComboBox ItemsSource="{Binding Suppliers}" SelectedItem="{Binding Supplier}" Margin="5,0"/>
+                <TextBlock Text="Поставщики" Margin="5"/>
+                <TextBlock Text="Поиск" Margin="5"/>
+                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"  Margin="5,0,5,5"/>
+                <ComboBox DisplayMemberPath="Title" ItemsSource="{Binding DisplayedSuppliers}" SelectionChanged="suppliers_SelectionChanged" Margin="5,0"/>
                 <TextBlock Text="Выбранные поставщики" Margin="5"/>
-                <ListView ItemsSource="{Binding SelectedSuppliersForMaterial}" BorderThickness="0" Margin="5"/>
+                    <ListView DisplayMemberPath="Title" ItemsSource="{Binding SelectedSuppliersForMaterial}"  SelectedItem="{Binding SelectedSupplier}" BorderThickness="0" Margin="5"/>
                 <Button x:Name="removeFromList" Content="Удалить из списка" Width="150" HorizontalAlignment="Center" Click="removeFromList_Click"/>
             </StackPanel>
         </Grid>

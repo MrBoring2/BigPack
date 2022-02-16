@@ -35,7 +35,7 @@ namespace TestDemPodgotovka.Views
         private Sort selectedSort;
         private Visibility btnVisibility;
         private string selectedFilter;
-
+        private Material selectedMaterial;
         private ObservableCollection<int> pages;
         private ObservableCollection<Sort> sortParams;
         private ObservableCollection<string> filterParams;
@@ -63,6 +63,7 @@ namespace TestDemPodgotovka.Views
         public ObservableCollection<Sort> SortParams { get { return sortParams; } set { sortParams = value; OnPropertyChanged(); } }
         public ObservableCollection<string> FilterParams { get { return filterParams; } set { filterParams = value; OnPropertyChanged(); } }
         public ObservableCollection<Material> DisplayedMaterials { get { return displayedMaterials; } set { displayedMaterials = value; OnPropertyChanged(); } }
+        public Material SelectedMaterial { get => selectedMaterial; set { selectedMaterial = value;OnPropertyChanged(); } }
         public List<Material> Materials { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -128,6 +129,10 @@ namespace TestDemPodgotovka.Views
             var materials = SortMaterials(Materials);
             materials = FilterMaterals(materials);
             DisplayedCountOfMaterials = $"{materials.Count} из {Materials.Count}";
+            if (DisplayedMaterials != null)
+            {
+                DisplayedMaterials.Clear();
+            }
             DisplayedMaterials = new ObservableCollection<Material>(materials.Skip((CurrentPage - 1) * itemsPerPage).Take(itemsPerPage).ToList());
         }
 
@@ -195,13 +200,33 @@ namespace TestDemPodgotovka.Views
 
         private void materialsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(materialsList.SelectedItems.Count > 1)
+            if (materialsList.SelectedItems.Count > 1)
             {
                 BtnVisibility = Visibility.Visible;
             }
             else
             {
                 BtnVisibility = Visibility.Collapsed;
+            }
+        }
+
+        private void addMaterial_Click(object sender, RoutedEventArgs e)
+        {
+            var materialWindow = new MaterialWindow();
+            if(materialWindow.ShowDialog() == true)
+            {
+                LoadMaterials();
+                RefreshMaterials();
+            }
+        }
+
+        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var materialWindow = new MaterialWindow(SelectedMaterial);
+            if(materialWindow.ShowDialog() == true)
+            {
+                LoadMaterials();
+                RefreshMaterials();
             }
         }
 
