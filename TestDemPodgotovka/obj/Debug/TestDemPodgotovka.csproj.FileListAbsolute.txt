@@ -44,9 +44,9 @@ C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovk
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.CopyComplete
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.exe
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.pdb
-C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.AssemblyReference.cache
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\Views\MaterialWindow.g.cs
 C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\Views\MaterialWindow.baml
+<<<<<<< HEAD
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\bin\Debug\TestDemPodgotovka.exe.config
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\bin\Debug\TestDemPodgotovka.exe
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\bin\Debug\TestDemPodgotovka.pdb
@@ -75,3 +75,6 @@ C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.cspr
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.CopyComplete
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.exe
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.pdb
+=======
+C:\Users\user452.CHENK\.ssh\BigPack\TestDemPodgotovka\obj\Debug\TestDemPodgotovka.csproj.AssemblyReference.cache
+>>>>>>> 147416be8facb5cbb84b705494491dd14bfe7836
