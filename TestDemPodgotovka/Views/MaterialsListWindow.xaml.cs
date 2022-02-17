@@ -29,7 +29,6 @@ namespace TestDemPodgotovka.Views
     {
         private string displayedCountOfMaterials;
         private readonly int itemsPerPage;
-        private readonly TestDemContext _context;
         private string search;
         private int currentPage;
         private Sort selectedSort;
@@ -43,7 +42,6 @@ namespace TestDemPodgotovka.Views
         public MaterialsListWindow()
         {
             InitializeComponent();
-            _context = new TestDemContext();
             itemsPerPage = 15;
             currentPage = 1;
             search = string.Empty;
@@ -82,19 +80,25 @@ namespace TestDemPodgotovka.Views
         }
         private void LoadMaterials()
         {
-            Materials = _context.Material.ToList();
-            RefreshMaterials();
+            using (var db = new TestDemContext())
+            {
+                Materials = db.Material.Include("MaterialType").Include("Supplier").ToList();
+                RefreshMaterials();
+            }
         }
         private void LoadFilterParams()
         {
-            var types = _context.MaterialType.ToList();
-            FilterParams = new ObservableCollection<string>();
-            FilterParams.Add("Все");
-            foreach (var item in types)
+            using (var db = new TestDemContext())
             {
-                FilterParams.Add(item.Title);
+                var types = db.MaterialType.ToList();
+                FilterParams = new ObservableCollection<string>();
+                FilterParams.Add("Все");
+                foreach (var item in types)
+                {
+                    FilterParams.Add(item.Title);
+                }
+                selectedFilter = FilterParams.FirstOrDefault();
             }
-            selectedFilter = FilterParams.FirstOrDefault();
         }
         private void LoadSortParams()
         {
@@ -187,15 +191,17 @@ namespace TestDemPodgotovka.Views
                 {
                     item.MinCount = changeWindow.Count;
                 }
-
-                var a = _context.SaveChanges();
+                using (var db = new TestDemContext())
+                {
+                    db.SaveChanges();
+                }
                 //RefreshMaterials();
             }
         }
 
         private void materialsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(materialsList.SelectedItems.Count > 1)
+            if (materialsList.SelectedItems.Count > 1)
             {
                 BtnVisibility = Visibility.Visible;
             }

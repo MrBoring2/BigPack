@@ -8,7 +8,7 @@ namespace TestDemPodgotovka.Data
     public partial class TestDemContext : DbContext
     {
         public TestDemContext()
-            : base("name=TestDemContextChenk")
+            : base("name=TestDemContext")
         {
         }
 
