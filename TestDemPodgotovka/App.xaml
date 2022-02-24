@@ -10,6 +10,7 @@
                 <ResourceDictionary>
                     <converters:LIstViewRowColorFromCountConverter x:Key="colorListViewConv"/>
                 </ResourceDictionary>
+                <ResourceDictionary Source="/Styles/MainStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

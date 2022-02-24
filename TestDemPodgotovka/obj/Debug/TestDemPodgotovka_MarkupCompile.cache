@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\MrBoring\GIT\BigPack\TestDemPodgotovka\App.xaml
-3-256965688
+4-542458611
 
 24227664627
 181000042945
-Views\MaterialsListWindow.xaml;Views\MaterialWindow.xaml;Views\MinCountChangeWindow.xaml;
+Styles\MainStyles.xaml;Views\MaterialsListWindow.xaml;Views\MaterialWindow.xaml;Views\MinCountChangeWindow.xaml;
 
 False
 

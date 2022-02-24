@@ -30,10 +30,11 @@
                 <ComboBox ItemsSource="{Binding FilterParams}" FontSize="16" VerticalAlignment="Center" SelectedItem="{Binding SelectedFilter}"/>
             </GroupBox>
         </Grid>
-        <ListView x:Name="materialsList" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" SelectionChanged="materialsList_SelectionChanged" ItemsSource="{Binding DisplayedMaterials}" SelectedItem="{Binding SelectedMaterial}">
+        <ListView x:Name="materialsList" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" 
+                  SelectionChanged="materialsList_SelectionChanged" ItemsSource="{Binding DisplayedMaterials}" SelectedItem="{Binding SelectedMaterial}">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type ListViewItem}">
-                    <Border BorderBrush="Black" BorderThickness="1"  Background="{Binding ID, Converter={StaticResource colorListViewConv}}">
+                    <Border BorderBrush="Black" BorderThickness="1" Background="{Binding ID, Converter={StaticResource colorListViewConv}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
@@ -53,13 +54,29 @@
                             </StackPanel>
                             <TextBlock Grid.Column="2" HorizontalAlignment="Right" Text="{Binding CountInStock, StringFormat={}Остаток: {0} шт.}"/>
                         </Grid>
-
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <EventSetter Event="MouseDoubleClick"  Handler="ListViewItem_MouseDoubleClick"/>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
+
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Aqua"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
@@ -67,7 +84,9 @@
         <Grid Grid.Row="2">
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Height="40" Margin="5">
                 <Button x:Name="back" Width="20" Content="←" Height="20" Click="back_Click"/>
-                <ListView x:Name="paginator" FontSize="16" Margin="5" BorderThickness="0" ItemsSource="{Binding Pages}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedItem="{Binding CurrentPage}" SelectionChanged="paginator_SelectionChanged">
+                <ListView x:Name="paginator" FontSize="16" Margin="5" BorderThickness="0" ItemsSource="{Binding DisplayedPages}" 
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          SelectedItem="{Binding CurrentPage}" SelectionChanged="paginator_SelectionChanged">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel/>
@@ -78,10 +97,9 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="addMaterial" Content="Добавить" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Width="172" Click="addMaterial_Click"/>
-                <Button x:Name="minCountChange" Content="Изменить количество на..." Visibility="{Binding BtnVisibility}" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Width="172" Click="minCountChange_Click"/>
+                <Button x:Name="minCountChange" Content="Изменить количество на..." Visibility="{Binding BtnVisibility}" HorizontalAlignment="Left" Margin="10,15,0,0" 
+                        VerticalAlignment="Top" Width="172" Click="minCountChange_Click"/>
             </StackPanel>
         </Grid>
-
-
     </Grid>
 </Window>

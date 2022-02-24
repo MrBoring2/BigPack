@@ -25,7 +25,7 @@ namespace TestDemPodgotovka.Resources.Converters
                 {
                     return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffba01"));
                 }
-                else return Brushes.White;
+                else return Brushes.Transparent;
             }
         }
 

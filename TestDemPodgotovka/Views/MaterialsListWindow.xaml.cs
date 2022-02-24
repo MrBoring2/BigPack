@@ -27,10 +27,12 @@ namespace TestDemPodgotovka.Views
     /// </summary>
     public partial class MaterialsListWindow : Window, INotifyPropertyChanged
     {
+        private readonly TestDemContext _context;
         private string displayedCountOfMaterials;
         private readonly int itemsPerPage;
         private string search;
-        private int currentPage;
+        private int currentPage; 
+            private int maxPage;
         private Sort selectedSort;
         private Visibility btnVisibility;
         private string selectedFilter;
@@ -42,26 +44,28 @@ namespace TestDemPodgotovka.Views
         public MaterialsListWindow()
         {
             InitializeComponent();
+            _context = new TestDemContext();
             itemsPerPage = 15;
             currentPage = 1;
             search = string.Empty;
             LoadData();
-            RefreshPages();
+            LoadPages();
             BtnVisibility = Visibility.Collapsed;
             DataContext = this;
         }
 
-        public string Search { get { return search; } set { search = value; OnPropertyChanged(); RefreshMaterials(); RefreshPages(); } }
+        public string Search { get { return search; } set { search = value; OnPropertyChanged(); RefreshMaterials(); } }
         public int CurrentPage { get { return currentPage; } set { currentPage = value > 0 ? value : 1; OnPropertyChanged(); RefreshMaterials(); } }
         public string DisplayedCountOfMaterials { get => displayedCountOfMaterials; set { displayedCountOfMaterials = value; OnPropertyChanged(); } }
         public Sort SelectedSort { get { return selectedSort; } set { selectedSort = value; OnPropertyChanged(); RefreshMaterials(); } }
         public Visibility BtnVisibility { get => btnVisibility; set { btnVisibility = value; OnPropertyChanged(); } }
-        public string SelectedFilter { get { return selectedFilter; } set { selectedFilter = value; OnPropertyChanged(); RefreshMaterials(); RefreshPages(); } }
+        public string SelectedFilter { get { return selectedFilter; } set { selectedFilter = value; OnPropertyChanged(); RefreshMaterials(); } }
         public ObservableCollection<int> Pages { get { return pages; } set { pages = value; OnPropertyChanged(); } }
+        public ObservableCollection<int> DisplayedPages => new ObservableCollection<int>(Pages.Take(maxPage > 0 ? maxPage : 1));
         public ObservableCollection<Sort> SortParams { get { return sortParams; } set { sortParams = value; OnPropertyChanged(); } }
         public ObservableCollection<string> FilterParams { get { return filterParams; } set { filterParams = value; OnPropertyChanged(); } }
         public ObservableCollection<Material> DisplayedMaterials { get { return displayedMaterials; } set { displayedMaterials = value; OnPropertyChanged(); } }
-        public Material SelectedMaterial { get => selectedMaterial; set { selectedMaterial = value;OnPropertyChanged(); } }
+        public Material SelectedMaterial { get => selectedMaterial; set { selectedMaterial = value; OnPropertyChanged(); } }
         public List<Material> Materials { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -81,11 +85,10 @@ namespace TestDemPodgotovka.Views
         }
         private void LoadMaterials()
         {
-            using (var db = new TestDemContext())
-            {
-                Materials = db.Material.Include("MaterialType").Include("Supplier").ToList();
-                RefreshMaterials();
-            }
+
+            Materials = _context.Material.ToList();
+            RefreshMaterials();
+
         }
         private void LoadFilterParams()
         {
@@ -114,30 +117,35 @@ namespace TestDemPodgotovka.Views
             };
             selectedSort = SortParams.FirstOrDefault();
         }
-        private void RefreshPages()
+        private void LoadPages()
         {
             Pages = new ObservableCollection<int>();
-            for (int i = 1; i <= MaxPage(); i++)
+            foreach (int index in Enumerable.Range(1, maxPage))
             {
-                Pages.Add(i);
+                Pages.Add(index);
             }
-
-            if (CurrentPage + 1 > MaxPage())
-            {
-                CurrentPage = MaxPage();
-            }
-            OnPropertyChanged(nameof(CurrentPage));
+            CurrentPage = Pages.FirstOrDefault();
         }
         private void RefreshMaterials()
         {
             var materials = SortMaterials(Materials);
+            //var materials = Materials;
             materials = FilterMaterals(materials);
             DisplayedCountOfMaterials = $"{materials.Count} из {Materials.Count}";
-            if (DisplayedMaterials != null)
+
+            if (maxPage != (int)Math.Ceiling((float)materials.Count / (float)itemsPerPage))
             {
-                DisplayedMaterials.Clear();
+                maxPage = (int)Math.Ceiling((float)materials.Count / (float)itemsPerPage);
+                OnPropertyChanged(nameof(DisplayedPages));
             }
             DisplayedMaterials = new ObservableCollection<Material>(materials.Skip((CurrentPage - 1) * itemsPerPage).Take(itemsPerPage).ToList());
+
+            if (CurrentPage > maxPage)
+            {
+                currentPage = maxPage;
+                OnPropertyChanged(nameof(CurrentPage));
+            }
+
         }
 
         private List<Material> SortMaterials(List<Material> materials)
@@ -160,7 +168,7 @@ namespace TestDemPodgotovka.Views
         private int MaxPage()
         {
             var materials = FilterMaterals(Materials);
-            var a = (int)Math.Ceiling((float)materials.Count / (float)itemsPerPage);
+           
             return (int)Math.Ceiling((float)materials.Count / (float)itemsPerPage);
         }
 
@@ -179,7 +187,7 @@ namespace TestDemPodgotovka.Views
 
         private void forward_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentPage + 1 <= MaxPage())
+            if (CurrentPage + 1 <= maxPage)
             {
                 CurrentPage++;
             }
@@ -219,7 +227,7 @@ namespace TestDemPodgotovka.Views
         private void addMaterial_Click(object sender, RoutedEventArgs e)
         {
             var materialWindow = new MaterialWindow();
-            if(materialWindow.ShowDialog() == true)
+            if (materialWindow.ShowDialog() == true)
             {
                 LoadMaterials();
                 RefreshMaterials();
@@ -229,7 +237,7 @@ namespace TestDemPodgotovka.Views
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var materialWindow = new MaterialWindow(SelectedMaterial);
-            if(materialWindow.ShowDialog() == true)
+            if (materialWindow.ShowDialog() == true)
             {
                 LoadMaterials();
                 RefreshMaterials();

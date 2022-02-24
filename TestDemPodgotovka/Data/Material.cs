@@ -51,6 +51,9 @@ namespace TestDemPodgotovka.Data
 
         public virtual MaterialType MaterialType { get; set; }
 
+
+
+        [NotMapped]
         public byte[] GetImage
         {
             get
